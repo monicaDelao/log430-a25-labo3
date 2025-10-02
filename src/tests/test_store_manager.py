@@ -99,7 +99,7 @@ def test_stock_flow(client):
     delete_order_response = client.delete(f"/orders/{order_id}")
     assert delete_order_response.status_code == 200  # DELETE - 200 OK
     delete_data = delete_order_response.get_json()
-    assert delete_data["deleted"] == True  # L'API retourne {"deleted": True}
+    assert delete_data["deleted"] is True  # L'API retourne {"deleted": True}
 
     # Vérifier que le stock est restauré à 5 unités
     stock_after_delete_response = client.get(f"/stocks/{product_id}")

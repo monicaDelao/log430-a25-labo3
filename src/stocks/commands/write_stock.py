@@ -19,8 +19,8 @@ def set_stock_for_product(product_id, quantity):
         result = session.execute(
             text(
                 """
-                UPDATE stocks 
-                SET quantity = :qty 
+                UPDATE stocks
+                SET quantity = :qty
                 WHERE product_id = :pid
             """
             ),
@@ -74,8 +74,8 @@ def update_stock_mysql(session, order_items, operation):
             session.execute(
                 text(
                     f"""
-                    UPDATE stocks 
-                    SET quantity = quantity {operation} :qty 
+                    UPDATE stocks
+                    SET quantity = quantity {operation} :qty
                     WHERE product_id = :pid
                 """
                 ),
