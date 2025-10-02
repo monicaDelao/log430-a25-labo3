@@ -107,15 +107,6 @@ jobs:
           docker inspect ${{ env.IMAGE_NAME }} --format='{{.Config.ExposedPorts}}'
           
           echo "✅ Image de production validée et prête pour le déploiement"
-          
-      - name: Tests de performance de base
-        run: |
-          curl -w "@scripts/curl-format.txt" -o /dev/null -s http://localhost:5000/health
-          
-      - name: Nettoyage
-        if: always()
-        run: |
-          docker stop acceptance-test || true
 
   # Job 3: Génération et déploiement de la documentation
   deploy-docs:
