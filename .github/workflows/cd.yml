@@ -128,24 +128,49 @@ jobs:
         run: |
           mysql -h 127.0.0.1 -P 3306 -u root -proot labo03_db < db-init/init.sql
           
+      - name: Créer fichier .env pour le test
+        run: |
+          cat > .env << EOF
+          DB_HOST=127.0.0.1
+          DB_PORT=3306
+          DB_NAME=labo03_db
+          DB_USER=labo03
+          DB_PASS=labo03
+          REDIS_HOST=127.0.0.1
+          REDIS_PORT=6379
+          REDIS_DB=0
+          EOF
+          
       - name: Démarrage de l'application en mode test
         run: |
+          # Lancer le conteneur en arrière-plan
           docker run --rm -d -p 5000:5000 --name acceptance-test \
             --network host \
-            -e DB_HOST=127.0.0.1 \
-            -e DB_PORT=3306 \
-            -e DB_NAME=labo03_db \
-            -e DB_USER=labo03 \
-            -e DB_PASS=labo03 \
-            -e REDIS_HOST=127.0.0.1 \
-            -e REDIS_PORT=6379 \
-            -e REDIS_DB=0 \
+            --env-file .env \
             ${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:production
-          sleep 15
+          
+          # Attendre que l'application soit prête
+          echo "Attente du démarrage de l'application..."
+          for i in {1..30}; do
+            if curl -f http://localhost:5000/health > /dev/null 2>&1; then
+              echo "✅ Application prête après $i tentatives"
+              break
+            fi
+            echo "Tentative $i/30..."
+            sleep 2
+          done
+          
+          # Vérifier si l'application répond
+          curl -f http://localhost:5000/health || exit 1
           
       - name: Exécution des tests d'acceptation
         run: |
           python scripts/acceptance_tests.py --staging-url=http://localhost:5000
+          
+      - name: Nettoyage du conteneur de test
+        if: always()
+        run: |
+          docker stop acceptance-test || true
           
       - name: Tests de performance de base
         run: |
