@@ -14,7 +14,7 @@ import pytest
 # Ajouter le répertoire parent au path pour permettre l'import
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from store_manager import app
+from store_manager import app  # noqa: E402
 
 
 @pytest.fixture
