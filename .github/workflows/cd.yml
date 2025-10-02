@@ -12,6 +12,7 @@ on:
 env:
   DOCKER_IMAGE_NAME: log430-labo3
   DOCKER_REGISTRY: ghcr.io
+  REPO_NAME: monicadelao/log430-a25-labo3
 
 jobs:
   # Job 1: Déploiement Docker automatique
@@ -40,7 +41,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}
+          images: ${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}
           tags: |
             type=ref,event=branch
             type=sha,prefix=main-
@@ -59,9 +60,11 @@ jobs:
           cache-to: type=gha,mode=max
           
       - name: Test de l'image déployée
+        env:
+          IMAGE_NAME: ${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:production
         run: |
           docker run --rm -d -p 5000:5000 --name test-container \
-            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}:production
+            ${{ env.IMAGE_NAME }}
           sleep 10
           curl -f http://localhost:5000/health || exit 1
           docker stop test-container
@@ -130,7 +133,7 @@ jobs:
             -e REDIS_HOST=127.0.0.1 \
             -e REDIS_PORT=6379 \
             -e REDIS_DB=0 \
-            ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}:production
+            ${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:production
           sleep 15
           
       - name: Exécution des tests d'acceptation
@@ -196,7 +199,7 @@ jobs:
           
           ## Métriques
           
-          - **Image Docker:** \`${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}:production\`
+          - **Image Docker:** \`${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:production\`
           - **Taille de l'image:** Voir les logs du build
           - **Tests passés:** Voir les rapports de tests
           
@@ -290,7 +293,7 @@ jobs:
           version: '3.8'
           services:
             app:
-              image: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}:production
+              image: ${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:production
               ports:
                 - "5000:5000"
               environment:
@@ -391,7 +394,7 @@ jobs:
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             
             # Tirer la nouvelle image
-            docker pull ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}:production
+            docker pull ${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:production
             
             # Arrêter les anciens conteneurs
             docker compose -f docker-compose.vm.yml down || true
@@ -447,7 +450,7 @@ jobs:
       - name: Résumé du déploiement complet
         run: |
           echo "Déploiement CD complet réussi!"
-          echo "Image Docker: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}:production"
+          echo "Image Docker: ${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:production"
           echo "Documentation: Voir GitHub Pages"
           echo "VM Production: http://10.194.32.238:5000"
           echo "Tous les tests d'acceptation sont passés"

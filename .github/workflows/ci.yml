@@ -9,6 +9,7 @@ on:
 env:
   DOCKER_IMAGE_NAME: log430-labo3
   DOCKER_REGISTRY: ghcr.io
+  REPO_NAME: monicadelao/log430-a25-labo3
   
 jobs:
   # Job 1: Tests unitaires et qualité du code
@@ -131,7 +132,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}
+          images: ${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
