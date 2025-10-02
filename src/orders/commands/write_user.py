@@ -4,20 +4,21 @@ SPDX - License - Identifier: LGPL - 3.0 - or -later
 Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 """
 
-from orders.models.user import User
 from db import get_sqlalchemy_session
+from orders.models.user import User
+
 
 def add_user(name: str, email: str):
     """Insert user with items in MySQL"""
     if not name or not email:
         raise ValueError("Cannot create user. A user must have name and email.")
-    
+
     session = get_sqlalchemy_session()
 
-    try: 
+    try:
         new_user = User(name=name, email=email)
         session.add(new_user)
-        session.flush() 
+        session.flush()
         session.commit()
         return new_user.id
     except Exception as e:
@@ -25,6 +26,7 @@ def add_user(name: str, email: str):
         raise e
     finally:
         session.close()
+
 
 def delete_user(user_id: int):
     """Delete user in MySQL"""
@@ -34,13 +36,12 @@ def delete_user(user_id: int):
         if user:
             session.delete(user)
             session.commit()
-            return 1  
+            return 1
         else:
-            return 0  
-            
+            return 0
+
     except Exception as e:
         session.rollback()
         raise e
     finally:
         session.close()
-

@@ -4,12 +4,14 @@ SPDX - License - Identifier: LGPL - 3.0 - or -later
 Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 """
 
-from sqlalchemy import Column, Integer, Float, String
+from sqlalchemy import Column, Float, Integer, String
+
 from orders.models.base import Base
 
+
 class Product(Base):
-    __tablename__ = 'products'
-    
+    __tablename__ = "products"
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     sku = Column(String, nullable=False)

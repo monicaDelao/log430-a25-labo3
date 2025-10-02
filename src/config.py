@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 # Essayer de charger .env depuis le répertoire courant puis le répertoire parent
 load_dotenv()  # Répertoire courant
-load_dotenv('../.env')  # Répertoire parent
+load_dotenv("../.env")  # Répertoire parent
 
 DB_HOST = os.getenv("DB_HOST")
 DB_PORT = int(os.getenv("DB_PORT"))
