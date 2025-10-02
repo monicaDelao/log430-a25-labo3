@@ -129,7 +129,7 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Configuration Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           
@@ -170,7 +170,7 @@ jobs:
           EOF
           
       - name: Configuration des pages GitHub
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v4
         
       - name: Construction de la documentation
         run: |
@@ -222,20 +222,21 @@ jobs:
           mkdocs build
           
       - name: Upload des artefacts
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./site
           
       - name: Déploiement vers GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
 
-  # Job 4: Déploiement sur VM de Production
+  # Job 4: Déploiement sur VM de Production (optionnel)
   deploy-vm:
     name: Déploiement VM Production
     runs-on: ubuntu-latest
     needs: validate-image
     if: github.ref == 'refs/heads/main'
+    continue-on-error: true  # Ne fait pas échouer le pipeline si la VM n'est pas accessible
     
     environment:
       name: vm-production
