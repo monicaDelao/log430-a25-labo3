@@ -63,11 +63,45 @@ jobs:
         env:
           IMAGE_NAME: ${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:production
         run: |
-          docker run --rm -d -p 5000:5000 --name test-container \
+          # Créer un réseau temporaire pour les tests
+          docker network create test-network
+          
+          # Démarrer MySQL temporaire
+          docker run --rm -d --name test-mysql --network test-network \
+            -e MYSQL_ROOT_PASSWORD=root \
+            -e MYSQL_DATABASE=labo03_db \
+            -e MYSQL_USER=labo03 \
+            -e MYSQL_PASSWORD=labo03 \
+            mysql:8.0
+          
+          # Démarrer Redis temporaire  
+          docker run --rm -d --name test-redis --network test-network \
+            redis:7-alpine
+          
+          # Attendre que les services soient prêts
+          sleep 15
+          
+          # Démarrer l'application avec les bonnes variables d'environnement
+          docker run --rm -d -p 5000:5000 --name test-container --network test-network \
+            -e DB_HOST=test-mysql \
+            -e DB_PORT=3306 \
+            -e DB_NAME=labo03_db \
+            -e DB_USER=root \
+            -e DB_PASS=root \
+            -e REDIS_HOST=test-redis \
+            -e REDIS_PORT=6379 \
+            -e REDIS_DB=0 \
             ${{ env.IMAGE_NAME }}
-          sleep 10
+          
+          # Attendre que l'application démarre
+          sleep 15
+          
+          # Tester l'endpoint health
           curl -f http://localhost:5000/health || exit 1
-          docker stop test-container
+          
+          # Nettoyer
+          docker stop test-container test-mysql test-redis || true
+          docker network rm test-network || true
           echo "Image de production testée avec succès"
 
   # Job 2: Tests d'acceptation automatisés
