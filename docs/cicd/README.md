@@ -7,6 +7,20 @@ Ce projet implémente un pipeline CI/CD complet pour l'application Store Manager
 - **Intégration Continue (CI)** : Tests automatisés, analyse de code, build Docker
 - **Déploiement Continu (CD)** : Déploiement automatique, tests d'acceptation, documentation
 
+## Captures d'écran du Pipeline
+
+### Vue d'ensemble GitHub Actions
+![Pipeline Overview](screenshots/github-actions-overvi.png)
+*Vue générale des workflows CI/CD dans GitHub Actions*
+
+### Pipeline CI en Exécution
+![CI Pipeline Running](screenshots/ci-pipeline-running.png)
+*Pipeline CI en cours d'exécution montrant les 3 jobs parallèles*
+
+### Pipeline CD Terminé
+![CD Pipeline Success](screenshots/cd-pipeline-success.png)
+*Pipeline CD terminé avec succès - déploiement complet*
+
 ## Architecture du Pipeline
 
 ```mermaid
@@ -171,10 +185,10 @@ VM_PASSWORD=eMEMIz7RmENn4piF
 ### Secrets GitHub (optionnels pour extensions futures)
 
 ```bash
-# Pour notifications Slack (optionnel)
+# Pour notifications Slack 
 SLACK_WEBHOOK_URL=https://hooks.slack.com/...
 
-# Pour déploiement Heroku (optionnel)
+# Pour déploiement Heroku 
 HEROKU_API_KEY=...
 HEROKU_EMAIL=...
 ```
@@ -275,6 +289,28 @@ git push origin main
 - **Objectif :** > 80%
 - **Rapports :** Codecov + HTML local
 - **Seuils :** Configurables dans `.codecov.yml`
+
+## Captures d'écran du Déploiement VM
+
+### Application Déployée sur la VM
+![VM Application Running](screenshots/vm-application-running.png)
+*Application Flask accessible sur http://10.194.32.238:5000*
+
+### Health Check Successful
+![Health Check](screenshots/health-check-success.png)
+*Endpoint /health retournant un statut OK*
+
+### Tests d'Acceptation Locaux
+![Acceptance Tests](screenshots/acceptance-tests-success.png)
+*Tous les 7 tests d'acceptation passant avec succès*
+
+### Docker Containers sur VM
+![VM Docker Containers](screenshots/vm-docker-containers.png)
+*Conteneurs MySQL, Redis et Store Manager en cours d'exécution*
+
+### Logs Application
+![Application Logs](screenshots/vm-application-logs.png)
+*Logs de l'application Flask montrant le démarrage réussi*
 
 ## Évolutions Futures
 
