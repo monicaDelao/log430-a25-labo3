@@ -151,6 +151,9 @@ jobs:
           
       - name: Tests d'intégration avec Docker Compose
         run: |
+          # Créer le fichier .env à partir de .env.example
+          cp .env.example .env
+          # Démarrer les services
           docker compose up -d
           sleep 30
           # Vérifier que les services sont en cours d'exécution
