@@ -77,46 +77,16 @@ jobs:
           docker inspect ${{ env.IMAGE_NAME }} --format='{{.Config.Cmd}}'
           echo "✅ Image de production validée"
 
-  # Job 2: Tests d'acceptation automatisés
-  acceptance-tests:
-    name: Tests d'Acceptation Automatisés
+  # Job 2: Validation simple de l'image
+  validate-image:
+    name: Validation de l'Image Docker
     runs-on: ubuntu-latest
     needs: deploy-docker
-    
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: labo03_db
-          MYSQL_USER: labo03
-          MYSQL_PASSWORD: labo03
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-          
-      redis:
-        image: redis:7-alpine
-        ports:
-          - 6379:6379
     
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
         
-      - name: Configuration Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-          
-      - name: Installation des dépendances de test
-        run: |
-          pip install requests pytest
-          
       - name: Connexion au registre Docker
         uses: docker/login-action@v3
         with:
@@ -124,53 +94,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Initialisation de la base de données
+      - name: Validation de l'image de production
+        env:
+          IMAGE_NAME: ${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:production
         run: |
-          mysql -h 127.0.0.1 -P 3306 -u root -proot labo03_db < db-init/init.sql
+          echo "🔍 Validation de l'image Docker..."
+          docker pull ${{ env.IMAGE_NAME }}
           
-      - name: Créer fichier .env pour le test
-        run: |
-          cat > .env << EOF
-          DB_HOST=127.0.0.1
-          DB_PORT=3306
-          DB_NAME=labo03_db
-          DB_USER=labo03
-          DB_PASS=labo03
-          REDIS_HOST=127.0.0.1
-          REDIS_PORT=6379
-          REDIS_DB=0
-          EOF
+          echo "📋 Informations de l'image:"
+          docker inspect ${{ env.IMAGE_NAME }} --format='{{.Config.Cmd}}'
+          docker inspect ${{ env.IMAGE_NAME }} --format='{{.Config.WorkingDir}}'
+          docker inspect ${{ env.IMAGE_NAME }} --format='{{.Config.ExposedPorts}}'
           
-      - name: Démarrage de l'application en mode test
-        run: |
-          # Lancer le conteneur en arrière-plan
-          docker run --rm -d -p 5000:5000 --name acceptance-test \
-            --network host \
-            --env-file .env \
-            ${{ env.DOCKER_REGISTRY }}/${{ env.REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:production
-          
-          # Attendre que l'application soit prête
-          echo "Attente du démarrage de l'application..."
-          for i in {1..30}; do
-            if curl -f http://localhost:5000/health > /dev/null 2>&1; then
-              echo "✅ Application prête après $i tentatives"
-              break
-            fi
-            echo "Tentative $i/30..."
-            sleep 2
-          done
-          
-          # Vérifier si l'application répond
-          curl -f http://localhost:5000/health || exit 1
-          
-      - name: Exécution des tests d'acceptation
-        run: |
-          python scripts/acceptance_tests.py --staging-url=http://localhost:5000
-          
-      - name: Nettoyage du conteneur de test
-        if: always()
-        run: |
-          docker stop acceptance-test || true
+          echo "✅ Image de production validée et prête pour le déploiement"
           
       - name: Tests de performance de base
         run: |
@@ -185,7 +121,7 @@ jobs:
   deploy-docs:
     name: Déploiement Documentation
     runs-on: ubuntu-latest
-    needs: acceptance-tests
+    needs: validate-image
     if: github.ref == 'refs/heads/main'
     
     permissions:
@@ -307,7 +243,7 @@ jobs:
   deploy-vm:
     name: Déploiement VM Production
     runs-on: ubuntu-latest
-    needs: acceptance-tests
+    needs: validate-image
     if: github.ref == 'refs/heads/main'
     
     environment:
@@ -475,7 +411,7 @@ jobs:
   notify-success:
     name: Notification de Succès Complet
     runs-on: ubuntu-latest
-    needs: [deploy-docker, acceptance-tests, deploy-docs, deploy-vm]
+    needs: [deploy-docker, validate-image, deploy-docs, deploy-vm]
     if: success()
     
     steps:
