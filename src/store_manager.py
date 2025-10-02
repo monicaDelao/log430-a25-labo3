@@ -18,6 +18,11 @@ def health():
     """Return OK if app is up and running"""
     return jsonify({'status':'ok'})
 
+@app.get('/health')
+def health_simple():
+    """Simple health endpoint for CI/CD checks"""
+    return jsonify({'status':'ok', 'message': 'Application is running'})
+
 # Write routes (Commands)
 @app.post('/orders')
 def post_orders():
