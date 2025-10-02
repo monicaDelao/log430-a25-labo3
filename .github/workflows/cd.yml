@@ -157,7 +157,7 @@ jobs:
 
   # Job 3: Notification de succès
   notify-success:
-    name: ✅ Déploiement Terminé
+    name: Déploiement Terminé
     runs-on: ubuntu-latest
     needs: [deploy-docker, deployment-report]
     if: success()
@@ -165,14 +165,14 @@ jobs:
     steps:
       - name: Résumé du déploiement complet
         run: |
-          echo "🎉 **DÉPLOIEMENT CI/CD TERMINÉ AVEC SUCCÈS!** 🎉"
+          echo "**DÉPLOIEMENT CI/CD TERMINÉ AVEC SUCCÈS!**"
           echo ""
-          echo "✅ Image Docker buildée et pushée vers GHCR"
-          echo "✅ Tests d'acceptation validés localement"
-          echo "✅ Application fonctionnelle en Docker Compose"
-          echo "✅ Rapport de déploiement généré"
+          echo "Image Docker buildée et pushée vers GHCR"
+          echo "Tests d'acceptation validés localement"
+          echo "Application fonctionnelle en Docker Compose"
+          echo "Rapport de déploiement généré"
           echo ""
-          echo "🌐 **Application accessible localement sur:** http://localhost:5000"
-          echo "📋 **Prochaines étapes:** Utilisez le rapport de déploiement pour la VM"
+          echo "**Application accessible localement sur:** http://localhost:5000"
+          echo "**Prochaines étapes:** Utilisez le rapport de déploiement pour la VM"
           echo ""
-          echo "🏆 **Laboratoire LOG430 complété avec succès!**"
+          echo "**Laboratoire LOG430 complété avec succès!**"
