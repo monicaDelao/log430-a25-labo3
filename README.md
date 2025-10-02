@@ -3,6 +3,9 @@
 <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Ets_quebec_logo.png" width="250">    
 ÉTS - LOG430 - Architecture logicielle - Chargé de laboratoire: Gabriel C. Ullmann, Automne 2025.
 
+> 🚀 **Pipeline CI/CD activé** - Déployment automatique vers VM 10.194.32.238:5000  
+> 📅 Dernière mise à jour: 2025-10-02 16:30 UTC
+
 ## 🎯 Objectifs d'apprentissage
 
 - Comprendre ce qu'est une API REST et les principes RESTful.
