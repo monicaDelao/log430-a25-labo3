@@ -1,4 +1,7 @@
-from graphene import ObjectType, String, Int, Float
+from graphene import Float
+from graphene import Int
+from graphene import ObjectType
+from graphene import String
 
 
 class Product(ObjectType):

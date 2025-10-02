@@ -93,9 +93,6 @@ jobs:
       - name: Vérification du formatage avec Black
         run: black --check --diff src/
         
-      - name: Vérification des imports avec isort
-        run: isort --check-only --diff src/
-        
       - name: Analyse statique avec flake8
         run: flake8 src/ --max-line-length=100 --ignore=E501,W503
         

@@ -4,7 +4,10 @@ SPDX - License - Identifier: LGPL - 3.0 - or -later
 Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 """
 
-from sqlalchemy import Column, Float, ForeignKey, Integer
+from sqlalchemy import Column
+from sqlalchemy import Float
+from sqlalchemy import ForeignKey
+from sqlalchemy import Integer
 from sqlalchemy.orm import relationship
 
 from orders.models.base import Base

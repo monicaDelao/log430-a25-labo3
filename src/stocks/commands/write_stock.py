@@ -5,9 +5,11 @@ Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 """
 
 from sqlalchemy import text
-from stocks.models.stock import Stock
+
+from db import get_redis_conn
+from db import get_sqlalchemy_session
 from stocks.models.product import Product
-from db import get_redis_conn, get_sqlalchemy_session
+from stocks.models.stock import Stock
 
 
 def set_stock_for_product(product_id, quantity):

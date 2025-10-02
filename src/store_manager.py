@@ -4,23 +4,26 @@ SPDX - License - Identifier: LGPL - 3.0 - or -later
 Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 """
 
+from flask import Flask
+from flask import jsonify
+from flask import request
 from graphene import Schema
+
+from orders.controllers.order_controller import create_order
+from orders.controllers.order_controller import get_order
+from orders.controllers.order_controller import get_report_best_selling_products
+from orders.controllers.order_controller import get_report_highest_spending_users
+from orders.controllers.order_controller import remove_order
+from orders.controllers.user_controller import create_user
+from orders.controllers.user_controller import get_user
+from orders.controllers.user_controller import remove_user
+from stocks.controllers.product_controller import create_product
+from stocks.controllers.product_controller import get_product
+from stocks.controllers.product_controller import remove_product
+from stocks.controllers.stock_controller import get_stock
+from stocks.controllers.stock_controller import get_stock_overview
+from stocks.controllers.stock_controller import set_stock
 from stocks.schemas.query import Query
-from flask import Flask, request, jsonify
-from orders.controllers.order_controller import (
-    create_order,
-    remove_order,
-    get_order,
-    get_report_highest_spending_users,
-    get_report_best_selling_products,
-)
-from orders.controllers.user_controller import create_user, remove_user, get_user
-from stocks.controllers.product_controller import (
-    create_product,
-    remove_product,
-    get_product,
-)
-from stocks.controllers.stock_controller import get_stock, set_stock, get_stock_overview
 
 app = Flask(__name__)
 

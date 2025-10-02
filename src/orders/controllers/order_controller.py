@@ -6,10 +6,11 @@ Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 
 from flask import jsonify
 
-from orders.commands.write_order import add_order, delete_order
-from orders.queries.read_order import (get_best_selling_products,
-                                       get_highest_spending_users,
-                                       get_order_by_id)
+from orders.commands.write_order import add_order
+from orders.commands.write_order import delete_order
+from orders.queries.read_order import get_best_selling_products
+from orders.queries.read_order import get_highest_spending_users
+from orders.queries.read_order import get_order_by_id
 
 
 def create_order(request):

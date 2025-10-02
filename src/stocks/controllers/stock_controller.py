@@ -5,12 +5,12 @@ Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 """
 
 from flask import jsonify
-from stocks.queries.read_stock import get_stock_by_id, get_stock_for_all_products
-from stocks.commands.write_stock import (
-    set_stock_for_product,
-    _populate_redis_from_mysql,
-)
+
 from db import get_redis_conn
+from stocks.commands.write_stock import _populate_redis_from_mysql
+from stocks.commands.write_stock import set_stock_for_product
+from stocks.queries.read_stock import get_stock_by_id
+from stocks.queries.read_stock import get_stock_for_all_products
 
 
 def set_stock(request):

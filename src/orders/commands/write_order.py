@@ -9,9 +9,11 @@ import json
 from db import get_redis_conn, get_sqlalchemy_session
 from orders.models.order import Order
 from orders.models.order_item import OrderItem
-from stocks.commands.write_stock import (check_in_items_to_stock,
-                                         check_out_items_from_stock,
-                                         update_stock_redis)
+from stocks.commands.write_stock import (
+    check_in_items_to_stock,
+    check_out_items_from_stock,
+    update_stock_redis,
+)
 from stocks.models.product import Product
 
 

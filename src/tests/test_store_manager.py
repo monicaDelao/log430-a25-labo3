@@ -5,8 +5,10 @@ Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 """
 
 import json
-import pytest
 import time
+
+import pytest
+
 from store_manager import app
 
 

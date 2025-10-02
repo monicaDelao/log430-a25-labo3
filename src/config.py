@@ -5,6 +5,7 @@ Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 """
 
 import os
+
 from dotenv import load_dotenv
 
 # Essayer de charger .env depuis le répertoire courant puis le répertoire parent

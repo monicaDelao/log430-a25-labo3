@@ -1,9 +1,13 @@
 import graphene
-from graphene import ObjectType, String, Int
-from stocks.schemas.product import Product
-from db import get_redis_conn, get_sqlalchemy_session
+from graphene import Int
+from graphene import ObjectType
+from graphene import String
+
+from db import get_redis_conn
+from db import get_sqlalchemy_session
 from stocks.models.product import Product as ProductModel
 from stocks.models.stock import Stock
+from stocks.schemas.product import Product
 
 
 class Query(ObjectType):

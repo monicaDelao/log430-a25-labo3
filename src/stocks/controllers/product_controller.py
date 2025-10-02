@@ -6,7 +6,8 @@ Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 
 from flask import jsonify
 
-from stocks.commands.write_product import add_product, delete_product
+from stocks.commands.write_product import add_product
+from stocks.commands.write_product import delete_product
 from stocks.queries.read_product import get_product_by_id
 
 

@@ -9,7 +9,8 @@ from collections import defaultdict
 
 from sqlalchemy.sql import func
 
-from db import get_redis_conn, get_sqlalchemy_session
+from db import get_redis_conn
+from db import get_sqlalchemy_session
 from orders.models.order import Order
 from orders.models.order_item import OrderItem
 

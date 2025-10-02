@@ -6,7 +6,8 @@ Auteurs : Gabriel C. Ullmann, Fabio Petrillo, 2025
 
 from flask import jsonify
 
-from orders.commands.write_user import add_user, delete_user
+from orders.commands.write_user import add_user
+from orders.commands.write_user import delete_user
 from orders.queries.read_user import get_user_by_id
 
 
