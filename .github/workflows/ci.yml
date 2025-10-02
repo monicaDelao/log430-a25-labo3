@@ -151,13 +151,13 @@ jobs:
           
       - name: Tests d'intégration avec Docker Compose
         run: |
-          docker-compose up -d
+          docker compose up -d
           sleep 30
           # Vérifier que les services sont en cours d'exécution
-          docker-compose ps
+          docker compose ps
           # Tester les endpoints
           curl -f http://localhost:5000/health || exit 1
-          docker-compose down
+          docker compose down
           
   # Job 3: Scan de sécurité
   security-scan:
