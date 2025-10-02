@@ -165,7 +165,7 @@ jobs:
     steps:
       - name: Résumé du déploiement complet
         run: |
-          echo "**DÉPLOIEMENT CI/CD TERMINÉ AVEC SUCCÈS!**"
+          echo "**TRAVAIL FINAL**"
           echo ""
           echo "Image Docker buildée et pushée vers GHCR"
           echo "Tests d'acceptation validés localement"
